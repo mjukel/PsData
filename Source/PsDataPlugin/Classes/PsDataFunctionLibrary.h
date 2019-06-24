@@ -19,6 +19,72 @@ class PSDATAPLUGIN_API UPsDataFunctionLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
+    UFUNCTION(BlueprintPure, Category = "PsData|Data")
+    static int32 GetCrc32(FString Name);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static int32 GetPathIntProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TArray<int32> GetPathIntArrayProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TMap<FString, int32> GetPathIntMapProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static uint8 GetPathByteProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TArray<uint8> GetPathByteArrayProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TMap<FString, uint8> GetPathByteMapProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static float GetPathFloatProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TArray<float> GetPathFloatArrayProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TMap<FString, float> GetPathFloatMapProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static bool GetPathBoolProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TArray<bool> GetPathBoolArrayProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TMap<FString, bool> GetPathBoolMapProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static FString GetPathStringProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TArray<FString> GetPathStringArrayProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TMap<FString, FString> GetPathStringMapProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static FText GetPathTextProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TArray<FText> GetPathTextArrayProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TMap<FString, FText> GetPathTextMapProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static UPsData* GetPathDataProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TArray<UPsData*> GetPathDataArrayProperty(UPsData* Target, FString Path);
+
+    UFUNCTION(BlueprintPure, Category = "PsData|Path")
+    static TMap<FString, UPsData*> GetPathDataMapProperty(UPsData* Target, FString Path);
+
 	/***********************************
 	 * int32
 	 ***********************************/

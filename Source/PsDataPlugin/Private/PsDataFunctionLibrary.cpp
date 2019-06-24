@@ -6,6 +6,307 @@
 #include "Collection/PsDataBlueprintMapProxy.h"
 #include "PsData.h"
 #include "PsDataCore.h"
+#include "PsDataUtils.h"
+
+int32 UPsDataFunctionLibrary::GetCrc32(FString Name) {
+    if(Name.IsEmpty()) return 0;
+
+    auto converted = TCHAR_TO_UTF8(Name.GetCharArray().GetData());
+    return FDataReflectionTools::crc32(converted);
+}
+
+int32 UPsDataFunctionLibrary::GetPathIntProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty() || Target->GetRoot() == nullptr) return 0;
+
+    int32 *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<int32>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return 0;
+    }
+
+    return *value;
+}
+
+TArray<int32> UPsDataFunctionLibrary::GetPathIntArrayProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TArray<int32>();;
+
+    TArray<int32> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TArray<int32>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TArray<int32>();
+    }
+
+    return *value;
+}
+
+TMap<FString, int32> UPsDataFunctionLibrary::GetPathIntMapProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TMap<FString, int32>();
+
+    TMap<FString, int32> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TMap<FString, int32>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TMap<FString, int32>();
+    }
+
+    return *value;
+}
+
+uint8 UPsDataFunctionLibrary::GetPathByteProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return 0;
+
+    uint8 *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<uint8>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return 0;
+    }
+
+    return *value;
+}
+
+TArray<uint8> UPsDataFunctionLibrary::GetPathByteArrayProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TArray<uint8>();
+
+    TArray<uint8> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TArray<uint8>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TArray<uint8>();
+    }
+
+    return *value;
+}
+
+TMap<FString, uint8> UPsDataFunctionLibrary::GetPathByteMapProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TMap<FString, uint8>();
+
+    TMap<FString, uint8> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TMap<FString, uint8>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TMap<FString, uint8>();
+    }
+
+    return *value;
+}
+
+float UPsDataFunctionLibrary::GetPathFloatProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return 0.0f;
+
+    float *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<float>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return 0.0f;
+    }
+
+    return *value;
+}
+
+TArray<float> UPsDataFunctionLibrary::GetPathFloatArrayProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TArray<float>();
+
+    TArray<float> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TArray<float>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TArray<float>();
+    }
+
+    return *value;
+}
+
+TMap<FString, float> UPsDataFunctionLibrary::GetPathFloatMapProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TMap<FString, float>();
+
+    TMap<FString, float> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TMap<FString, float>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TMap<FString, float>();
+    }
+
+    return *value;
+}
+
+bool UPsDataFunctionLibrary::GetPathBoolProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return 0;
+
+    bool *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<bool>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return false;
+    }
+
+    return *value;
+}
+
+TArray<bool> UPsDataFunctionLibrary::GetPathBoolArrayProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TArray<bool>();
+
+    TArray<bool>* value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TArray<bool>>(Target->GetRoot(), Path, value)) {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TArray<bool>();
+    }
+
+    return *value;
+}
+
+TMap<FString, bool> UPsDataFunctionLibrary::GetPathBoolMapProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TMap<FString, bool>();;
+
+    TMap<FString, bool> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TMap<FString, bool>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TMap<FString, bool>();
+    }
+
+    return *value;
+}
+
+FString UPsDataFunctionLibrary::GetPathStringProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return FString();
+
+    FString *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<FString>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return FString();
+    }
+
+    return *value;
+}
+
+TArray<FString> UPsDataFunctionLibrary::GetPathStringArrayProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TArray<FString>();
+
+    TArray<FString> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TArray<FString>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TArray<FString>();
+    }
+
+    return *value;
+}
+
+TMap<FString, FString> UPsDataFunctionLibrary::GetPathStringMapProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TMap<FString, FString>();
+
+    TMap<FString, FString> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TMap<FString, FString>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TMap<FString, FString>();
+    }
+
+    return *value;
+}
+
+FText UPsDataFunctionLibrary::GetPathTextProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return FText();
+
+    FText *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<FText>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return FText();
+    }
+
+    return *value;
+}
+
+TArray<FText> UPsDataFunctionLibrary::GetPathTextArrayProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TArray<FText>();
+
+    TArray<FText> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TArray<FText>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TArray<FText>();
+    }
+
+    return *value;
+}
+
+TMap<FString, FText> UPsDataFunctionLibrary::GetPathTextMapProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TMap<FString, FText>();
+
+    TMap<FString, FText> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TMap<FString, FText>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TMap<FString, FText>();
+    }
+
+    return *value;
+}
+
+UPsData* UPsDataFunctionLibrary::GetPathDataProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return nullptr;
+
+    UPsData** value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<UPsData*>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return nullptr;
+    }
+
+    return *value;
+}
+
+TArray<UPsData*> UPsDataFunctionLibrary::GetPathDataArrayProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TArray<UPsData*>();
+
+    TArray<UPsData*> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TArray<UPsData*>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TArray<UPsData*>();
+    }
+
+    return *value;
+}
+
+TMap<FString, UPsData*> UPsDataFunctionLibrary::GetPathDataMapProperty(UPsData* Target, FString Path) {
+    if(Target == nullptr || Path.IsEmpty()) return TMap<FString, UPsData*>();
+
+    TMap<FString, UPsData*> *value = nullptr;
+
+    if (!FDataReflectionTools::GetByPath<TMap<FString, UPsData*>>(Target->GetRoot(), Path, value))
+    {
+        UE_LOG(LogData, Display, TEXT("Can't find path \"%s\" in \"%s\""), *Path, *Target->GetClass()->GetName())
+        return TMap<FString, UPsData*>();
+    }
+
+    return *value;
+}
 
 /***********************************
  * int32

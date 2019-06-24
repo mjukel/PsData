@@ -25,6 +25,36 @@ public:
 	UFUNCTION(BlueprintPure, meta = (Category = "PsData|Collection"))
 	bool IsValid();
 
+    UFUNCTION(BlueprintCallable, meta = (Category = "PsData|Collection"))
+    int32 Add(UPsData* Element);
+
+    UFUNCTION(BlueprintCallable, meta = (Category = "PsData|Collection"))
+    void Insert(UPsData* Element, int32 Index);
+
+    UFUNCTION(BlueprintCallable, meta = (Category = "PsData|Collection"))
+    void RemoveAt(int32 Index);
+
+    UFUNCTION(BlueprintCallable, meta = (Category = "PsData|Collection"))
+    int32 Remove(UPsData* Element);
+
+    UFUNCTION(BlueprintCallable, meta = (Category = "PsData|Collection"))
+    UPsData* Set(UPsData* Element, int32 Index);
+
+    UFUNCTION(BlueprintPure, meta = (Category = "PsData|Collection"))
+    UPsData* Get(int32 Index);
+
+    UFUNCTION(BlueprintPure, meta = (Category = "PsData|Collection"))
+    int32 Find(UPsData* Element);
+
+    UFUNCTION(BlueprintPure, meta = (Category = "PsData|Collection"))
+    int32 Num();
+
+    UFUNCTION(BlueprintPure, meta = (Category = "PsData|Collection"))
+    bool IsEmpty();
+
+    UFUNCTION(BlueprintPure, meta = (Category = "PsData|Collection"))
+    bool IsValidIndex(int32 Index);
+
 	/** Bind */
 	void Bind(const FString& Type, const FPsDataDynamicDelegate& Delegate) const;
 

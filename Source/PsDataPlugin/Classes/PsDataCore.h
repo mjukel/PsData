@@ -871,7 +871,8 @@ bool GetByPath(UPsData* Instance, const TArray<FString>& Path, int32 PathOffset,
 						}
 						else
 						{
-							check(false && "Can't use nullptr property");
+							// check(false && "Can't use nullptr property");
+                            UE_LOG(LogData, Display, TEXT("Can't use nullptr property"))
 							return false;
 						}
 					}
@@ -882,7 +883,8 @@ bool GetByPath(UPsData* Instance, const TArray<FString>& Path, int32 PathOffset,
 				}
 				else
 				{
-					check(false && "Can't use property without childeren");
+					//check(false && "Can't use property without children");
+                    UE_LOG(LogData, Display, TEXT("Can't use property without children"))
 					return false;
 				}
 			}
@@ -906,19 +908,22 @@ bool GetByPath(UPsData* Instance, const TArray<FString>& Path, int32 PathOffset,
 								}
 								else
 								{
-									check(false && "Can't use nullptr property");
+									//check(false && "Can't use nullptr property");
+                                    UE_LOG(LogData, Display, TEXT("Can't use nullptr property"))
 									return false;
 								}
 							}
 							else
 							{
-								check(false && "Can't find property by index");
+								//check(false && "Can't find property by index");
+                                UE_LOG(LogData, Display, TEXT("Can't find property by index"))
 								return false;
 							}
 						}
 						else
 						{
-							check(false && "Can't use property as index");
+							//check(false && "Can't use property as index");
+                            UE_LOG(LogData, Display, TEXT("Can't use property as index"))
 							return false;
 						}
 					}
@@ -944,13 +949,15 @@ bool GetByPath(UPsData* Instance, const TArray<FString>& Path, int32 PathOffset,
 							}
 							else
 							{
-								check(false && "Can't find property by index");
+								//check(false && "Can't find property by index");
+                                UE_LOG(LogData, Display, TEXT("Can't find property by index"))
 								return false;
 							}
 						}
 						else
 						{
-							check(false && "Can't use property as index");
+							//check(false && "Can't use property as index");
+                            UE_LOG(LogData, Display, TEXT("Can't use property as index"))
 							return false;
 						}
 					}
@@ -976,7 +983,8 @@ bool GetByPath(UPsData* Instance, const TArray<FString>& Path, int32 PathOffset,
 						}
 						else
 						{
-							check(false && "Can't find property by name");
+							//check(false && "Can't find property by name");
+                            UE_LOG(LogData, Display, TEXT("Can't find property by name"))
 							return false;
 						}
 					}
@@ -1000,7 +1008,8 @@ bool GetByPath(UPsData* Instance, const TArray<FString>& Path, int32 PathOffset,
 						}
 						else
 						{
-							check(false && "Can't find property by name");
+							//check(false && "Can't find property by name");
+                            UE_LOG(LogData, Display, TEXT("Can't find property by name"))
 							return false;
 						}
 					}
@@ -1014,7 +1023,8 @@ bool GetByPath(UPsData* Instance, const TArray<FString>& Path, int32 PathOffset,
 	}
 	else
 	{
-		check(false && "Can't find property by name");
+		//check(false && "Can't find property by name");
+        UE_LOG(LogData, Display, TEXT("Can't find property by name"))
 		return false;
 	}
 
@@ -1039,11 +1049,19 @@ bool GetByPath(UPsData* Instance, const FString& Path, T*& OutValue)
 		Path.ParseIntoArray(PathArray, TEXT("."));
 		if (PathArray.Num() > 1)
 		{
-			return GetByPath<T>(Instance, PathArray, 0, PathArray.Num(), OutValue);
+			if(GetByPath<T>(Instance, PathArray, 0, PathArray.Num(), OutValue)) {
+			    return true;
+			} else {
+                UE_LOG(LogData, Display, TEXT("Can't find property \"%s\" in \"%s\""), *Path, *Instance->GetClass()->GetName())
+			    return false;
+			}
 		}
 	}
 
-	check(false && "Can't find property by name");
+	// check(false && "Can't find property by name");
+
+    UE_LOG(LogData, Display, TEXT("Can't find property \"%s\" in \"%s\""), *Path, *Instance->GetClass()->GetName())
+
 	OutValue = nullptr;
 	return false;
 }
