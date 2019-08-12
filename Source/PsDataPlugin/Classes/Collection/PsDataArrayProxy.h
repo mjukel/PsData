@@ -155,6 +155,32 @@ public:
 		return Index;
 	}
 
+	template <typename PredicateType>
+	int32 RemoveAll(const PredicateType& Predicate)
+	{
+		static_assert(!bConst, "Unsupported method for FPsDataConstArrayProxy, use FPsDataArrayProxy");
+
+		int32 RemovedElements = 0;
+		auto& Array = Get();
+		for (auto It = Array.CreateIterator(); It; ++It)
+		{
+			typename FDataReflectionTools::TConstRef<T, true>::Type Element = *It;
+			if (Predicate(Element))
+			{
+				RemovedElements += 1;
+				FDataReflectionTools::FArrayChangeBehavior<T>::RemoveFromArray(Instance.Get(), *It);
+				It.RemoveCurrent();
+			}
+		}
+
+		if (RemovedElements > 0)
+		{
+			UPsDataEvent::DispatchChange(Instance.Get(), Field);
+		}
+
+		return RemovedElements;
+	}
+
 	typename FDataReflectionTools::TConstRef<T, bConst>::Type Set(typename FDataReflectionTools::TConstRef<T>::Type Element, int32 Index)
 	{
 		static_assert(!bConst, "Unsupported method for FPsDataConstArrayProxy, use FPsDataArrayProxy");
@@ -171,6 +197,12 @@ public:
 	int32 Find(typename FDataReflectionTools::TConstRef<T>::Type Element) const
 	{
 		return Get().Find(Element);
+	}
+
+	template <typename Predicate>
+	typename FDataReflectionTools::TConstRef<T*, bConst>::Type FindByPredicate(Predicate Pred) const
+	{
+		return Get().FindByPredicate(Pred);
 	}
 
 	typename FDataReflectionTools::TConstRef<T, bConst>::Type Get(int32 Index) const

@@ -31,14 +31,13 @@ FText UPsDataNode_SetVariable::GetNodeTitle(ENodeTitleType::Type TitleType) cons
 		return FText::FromString(TEXT("Bad PsDataNode_SetVariable node"));
 	}
 
-	switch (TitleType)
+	if (TitleType == ENodeTitleType::FullTitle)
 	{
-	case ENodeTitleType::MenuTitle:
-		return FText::FromString(FString::Printf(TEXT("Set %s"), *PropertyName));
-	case ENodeTitleType::FullTitle:
 		return FText::FromString(FString::Printf(TEXT("Set %s::%s"), *TargetClass->GetName(), *PropertyName));
-	default:
-		return FText::FromString(TEXT("Set"));
+	}
+	else
+	{
+		return FText::FromString(FString::Printf(TEXT("Set %s"), *PropertyName));
 	}
 }
 
@@ -78,6 +77,7 @@ void UPsDataNode_SetVariable::GetMenuActions(FBlueprintActionDatabaseRegistrar& 
 				UPsDataNode_Variable* Node = CastChecked<UPsDataNode_Variable>(EvaluatorNode);
 				Node->TargetClass = TargetClass;
 				Node->PropertyName = Field.Name;
+				Node->PropertyCppType = Field.Context->GetCppType();
 				Node->UpdateFunctionReference();
 			});
 
