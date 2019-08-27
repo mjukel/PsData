@@ -37,6 +37,9 @@ public:
 	/** Bind */
 	void Unbind(const FString& Type, const FPsDataDelegate& Delegate) const;
 
+    UFUNCTION(BlueprintCallable, meta = (Category = "PsData|Collection"))
+    bool Add(const FString& Key, UPsData* Element);
+
 	/** Get const proxy */
 	FPsDataConstMapProxy<UPsData*> GetProxy();
 

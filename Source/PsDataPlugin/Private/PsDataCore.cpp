@@ -352,3 +352,31 @@ void FDataReflection::Compile()
 		}
 	}
 }
+
+namespace FDataReflectionTools {
+    template <>
+    bool UnsafeGet<FString>(UPsData* Instance, const TSharedPtr<const FDataField>& Field, FString*& OutValue)
+    {
+        FDataMemory<FString>* Memory = static_cast<FDataMemory<FString>*>(FPsDataFriend::GetMemory(Instance)[Field->Index].Get());
+        OutValue = &Memory->Value;
+
+        UE_LOG(LogTemp, Warning, TEXT("Getting field %s=%s, instance=%x, memory=%x)"), *Field->Name, *Memory->Value, Instance, Memory);
+
+        return true;
+    }
+
+    template <>
+    void UnsafeSet<FString>(UPsData* Instance, const TSharedPtr<const FDataField>& Field, typename TConstRef<FString>::Type NewValue)
+    {
+        FString* OldValue = nullptr;
+        FDataMemory<FString>* Memory = static_cast<FDataMemory<FString>*>(FPsDataFriend::GetMemory(Instance)[Field->Index].Get());
+        OldValue = &Memory->Value;
+
+        UE_LOG(LogTemp, Warning, TEXT("Setting field %s=%s, instance=%x, memory=%x"), *Field->Name, *NewValue, Instance, Memory);
+
+        if (FDataMemory<FString>::Set(Instance, Field, *OldValue, NewValue))
+        {
+            UPsDataEvent::DispatchChange(Instance, Field);
+        }
+    }
+}

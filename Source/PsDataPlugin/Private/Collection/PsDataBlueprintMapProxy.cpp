@@ -61,3 +61,7 @@ const TMap<FString, UPsData*>& UPsDataBlueprintMapProxy::GetRef()
 {
 	return Proxy.GetRef();
 }
+
+bool UPsDataBlueprintMapProxy::Add(const FString& Key, UPsData* Element) {
+    return Proxy.Add(Key, Element);
+}

@@ -21,6 +21,8 @@ namespace FDataReflectionTools
 {
 void FPsDataFriend::ChangeDataName(UPsData* Data, const FString& Name, const FString& CollectionName)
 {
+    UE_LOG(LogTemp, Warning, TEXT("Change name %s=%s"), *Name, *CollectionName);
+
 	if (Data->DataKey != Name || Data->CollectionKey != CollectionName)
 	{
 		Data->DataKey = Name;
