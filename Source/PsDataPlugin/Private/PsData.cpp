@@ -35,7 +35,7 @@ void FPsDataFriend::AddChild(UPsData* Parent, UPsData* Data)
 {
 	if (Data->Parent != nullptr)
 	{
-		UE_LOG(LogData, Fatal, TEXT("Child already added"));
+		UE_LOG(LogData, Error, TEXT("Child already added"));
 		return;
 	}
 
@@ -48,7 +48,7 @@ void FPsDataFriend::RemoveChild(UPsData* Parent, UPsData* Data)
 {
 	if (Data->Parent != Parent)
 	{
-		UE_LOG(LogData, Fatal, TEXT("Child not added"));
+		UE_LOG(LogData, Error, TEXT("Child not added"));
 		return;
 	}
 

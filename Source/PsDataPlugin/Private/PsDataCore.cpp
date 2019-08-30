@@ -21,7 +21,8 @@ void FDataReflection::AddField(const char* CharName, int32 Hash, FAbstractDataTy
 
 	if (!InQueue())
 	{
-		UE_LOG(LogData, Fatal, TEXT("Can't describe property \"%s\" because queue is empty"), *Name);
+		UE_LOG(LogData, Error, TEXT("Can't describe property \"%s\" because queue is empty"), *Name);
+		return;
 	}
 
 	UClass* OwnerClass = GetLastClassInQueue();
@@ -36,7 +37,8 @@ void FDataReflection::AddField(const char* CharName, int32 Hash, FAbstractDataTy
 
 	if (MapByHash.Contains(Hash))
 	{
-		UE_LOG(LogData, Fatal, TEXT("Can't generate unique hash for %s::%s 0x%08x"), *OwnerClass->GetName(), *Name, Hash);
+		UE_LOG(LogData, Error, TEXT("Can't generate unique hash for %s::%s 0x%08x"), *OwnerClass->GetName(), *Name, Hash);
+		return;
 	}
 
 	MapByName.Add(Name, Field);
@@ -54,7 +56,8 @@ void FDataReflection::AddLink(const char* CharName, const char* CharPath, const 
 
 	if (!InQueue())
 	{
-		UE_LOG(LogData, Fatal, TEXT("Can't describe link \"%s\" because queue is empty"), *Name);
+		UE_LOG(LogData, Error, TEXT("Can't describe link \"%s\" because queue is empty"), *Name);
+		return;
 	}
 
 	UClass* OwnerClass = GetLastClassInQueue();
@@ -71,7 +74,8 @@ void FDataReflection::AddLink(const char* CharName, const char* CharPath, const 
 			}
 			else
 			{
-				UE_LOG(LogData, Fatal, TEXT("Can't describe link \"%s\" because path property \"%s\" has unsupported type \"%s\""), *Name, *Path, *PathField->Context->GetCppType());
+				UE_LOG(LogData, Error, TEXT("Can't describe link \"%s\" because path property \"%s\" has unsupported type \"%s\""), *Name, *Path, *PathField->Context->GetCppType());
+				return;
 			}
 		}
 	}
@@ -84,7 +88,8 @@ void FDataReflection::AddLink(const char* CharName, const char* CharPath, const 
 		auto Link = *Find;
 		if (!Link->bAbstract)
 		{
-			UE_LOG(LogData, Fatal, TEXT("Can't override link for %s::%s 0x%08x"), *OwnerClass->GetName(), *Link->Name, Hash);
+			UE_LOG(LogData, Error, TEXT("Can't override link for %s::%s 0x%08x"), *OwnerClass->GetName(), *Link->Name, Hash);
+			return;
 		}
 	}
 
@@ -360,7 +365,7 @@ namespace FDataReflectionTools {
         FDataMemory<FString>* Memory = static_cast<FDataMemory<FString>*>(FPsDataFriend::GetMemory(Instance)[Field->Index].Get());
         OutValue = &Memory->Value;
 
-        UE_LOG(LogTemp, Warning, TEXT("Getting field %s=%s, instance=%x, memory=%x)"), *Field->Name, *Memory->Value, Instance, Memory);
+        UE_LOG(LogTemp, Verbose, TEXT("Getting field %s=%s, instance=%x, memory=%x)"), *Field->Name, *Memory->Value, Instance, Memory);
 
         return true;
     }
@@ -372,7 +377,7 @@ namespace FDataReflectionTools {
         FDataMemory<FString>* Memory = static_cast<FDataMemory<FString>*>(FPsDataFriend::GetMemory(Instance)[Field->Index].Get());
         OldValue = &Memory->Value;
 
-        UE_LOG(LogTemp, Warning, TEXT("Setting field %s=%s, instance=%x, memory=%x"), *Field->Name, *NewValue, Instance, Memory);
+        UE_LOG(LogTemp, Verbose, TEXT("Setting field %s=%s, instance=%x, memory=%x"), *Field->Name, *NewValue, Instance, Memory);
 
         if (FDataMemory<FString>::Set(Instance, Field, *OldValue, NewValue))
         {

@@ -891,7 +891,7 @@ const FString& UPsDataFunctionLibrary::GetLinkPath(const UPsData* ConstTarget, T
 		}
 		else
 		{
-			UE_LOG(LogData, Fatal, TEXT("Can't find property with path \"%s\" in \"%s\""), *Link->Name, *Target->GetClass()->GetName())
+			UE_LOG(LogData, Error, TEXT("Can't find property with path \"%s\" in \"%s\""), *Link->Name, *Target->GetClass()->GetName())
 		}
 	}
 	return Link->Path;
@@ -959,7 +959,8 @@ void UPsDataFunctionLibrary::GetLinkKeys(const UPsData* ConstTarget, TSharedPtr<
 		UEnum* Enum = Cast<UEnum>(Field->Context->GetUE4Type());
 		if (!Enum)
 		{
-			UE_LOG(LogData, Fatal, TEXT("Unsupported enum \"%s\""), *Field->Context->GetCppType());
+			UE_LOG(LogData, Error, TEXT("Unsupported enum \"%s\""), *Field->Context->GetCppType());
+			return;
 		}
 
 		if (!Field->Context->IsContainer())
@@ -986,15 +987,17 @@ void UPsDataFunctionLibrary::GetLinkKeys(const UPsData* ConstTarget, TSharedPtr<
 		}
 		else
 		{
-			UE_LOG(LogData, Fatal, TEXT("Unsupported type \"%s\" in \"%s\""), *Link->Name, *Target->GetClass()->GetName());
+			UE_LOG(LogData, Error, TEXT("Unsupported type \"%s\" in \"%s\""), *Link->Name, *Target->GetClass()->GetName());
+			return;
 		}
 	}
 	else
 	{
-		UE_LOG(LogData, Fatal, TEXT("Unsupported type \"%s\" in \"%s\""), *Link->Name, *Target->GetClass()->GetName());
+		UE_LOG(LogData, Error, TEXT("Unsupported type \"%s\" in \"%s\""), *Link->Name, *Target->GetClass()->GetName());
+		return;
 	}
 
-	UE_LOG(LogData, Fatal, TEXT("Can't find property \"%s\" in \"%s\""), *Field->Name, *Target->GetClass()->GetName());
+	UE_LOG(LogData, Error, TEXT("Can't find property \"%s\" in \"%s\""), *Field->Name, *Target->GetClass()->GetName());
 }
 
 UPsData* UPsDataFunctionLibrary::GetDataByLinkHash(const UPsData* ConstTarget, int32 Hash)
@@ -1012,7 +1015,8 @@ UPsData* UPsDataFunctionLibrary::GetDataByLinkHash(const UPsData* ConstTarget, i
 	TMap<FString, UPsData*>* MapPtr = nullptr;
 	if (!FDataReflectionTools::GetByPath<TMap<FString, UPsData*>>(Target->GetRoot(), LinkPath, MapPtr))
 	{
-		UE_LOG(LogData, Fatal, TEXT("Can't find path \"%s\" in \"%s\""), *LinkPath, *Target->GetClass()->GetName())
+		UE_LOG(LogData, Error, TEXT("Can't find path \"%s\" in \"%s\""), *LinkPath, *Target->GetClass()->GetName())
+		return nullptr;
 	}
 
 	UPsData** Find = MapPtr->Find(Keys[0]);
@@ -1023,7 +1027,7 @@ UPsData* UPsDataFunctionLibrary::GetDataByLinkHash(const UPsData* ConstTarget, i
 
 	if (!Link->Meta.bNullable)
 	{
-		UE_LOG(LogData, Fatal, TEXT("Link without Nullable meta can't be nullptr"))
+		UE_LOG(LogData, Error, TEXT("Link without Nullable meta can't be nullptr"))
 	}
 
 	return nullptr;
@@ -1042,12 +1046,14 @@ TArray<UPsData*> UPsDataFunctionLibrary::GetDataArrayByLinkHash(const UPsData* C
 
 	const FString& LinkPath = GetLinkPath(ConstTarget, Link);
 	TMap<FString, UPsData*>* MapPtr = nullptr;
+    TArray<UPsData*> Result;
+
 	if (!FDataReflectionTools::GetByPath<TMap<FString, UPsData*>>(Target->GetRoot(), LinkPath, MapPtr))
 	{
-		UE_LOG(LogData, Fatal, TEXT("Can't find path \"%s\" in \"%s\""), *LinkPath, *Target->GetClass()->GetName())
+		UE_LOG(LogData, Error, TEXT("Can't find path \"%s\" in \"%s\""), *LinkPath, *Target->GetClass()->GetName())
+		return Result;
 	}
 
-	TArray<UPsData*> Result;
 	for (const FString& Key : Keys)
 	{
 		UPsData** Find = MapPtr->Find(Key);
@@ -1057,7 +1063,7 @@ TArray<UPsData*> UPsDataFunctionLibrary::GetDataArrayByLinkHash(const UPsData* C
 		}
 		else if (!Link->Meta.bNullable)
 		{
-			UE_LOG(LogData, Fatal, TEXT("Link without Nullable meta can't be nullptr"))
+			UE_LOG(LogData, Error, TEXT("Link without Nullable meta can't be nullptr"))
 		}
 	}
 	return Result;
