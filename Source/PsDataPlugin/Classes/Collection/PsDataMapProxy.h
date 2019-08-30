@@ -252,7 +252,7 @@ public:
 	template <bool bIteratorConst>
 	struct TProxyIterator
 	{
-		typedef typename TMap<FString, typename FDataReflectionTools::TSelector<const T, T, bIteratorConst>::Value>::ElementType PairType;
+		typedef typename TMap<FString, typename FDataReflectionTools::TConstValue<T, bIteratorConst>::Type>::ElementType PairType;
 
 	private:
 		friend struct FPsDataBaseMapProxy;
@@ -278,7 +278,7 @@ public:
 		{
 			static_assert(!bIteratorConst, "Unsupported method for FPsDataConstMapProxy::TProxyIterator, use FPsDataMapProxy::TProxyIterator");
 
-			T& Element = Iterator->Value();
+			T& Element = Iterator.Value();
 			FDataReflectionTools::FMapChangeBehavior<T>::RemoveFromMap(Proxy.Instance.Get(), Element);
 			Iterator.RemoveCurrent();
 			UPsDataEvent::DispatchChange(Proxy.Instance.Get(), Proxy.Field);
