@@ -1156,7 +1156,7 @@ void SetByName(UPsData* Instance, const FString& Name, typename FDataReflectionT
 {
     if(!Instance) {
         UE_LOG(LogData, Display, TEXT("SetByName for %s on null instance"), *Name)
-        return false;
+        return;
     }
 
 	auto Find = FDataReflection::GetFields(Instance->GetClass()).Find(Name);
